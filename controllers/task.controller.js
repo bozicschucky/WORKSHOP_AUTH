@@ -20,34 +20,25 @@ module.exports = {
   list: (req, res) => {
     Task.find({}, (err, tasks) => {
       if (err) console.log(err);
-      return res.json({
-        message: "Created successfully",
-        tasks: tasks
-      })
+      return res.json({tasks: tasks})
     });
   },
 
   get: (req, res) => {
-    const id = req.params.id;
-    Task.findOne({_id: id}, (err, task) => {
+    Task.findOne({_id: req.params.id}, (err, task) => {
       if (err) console.log(err);
-      return res.json({
-        task: task
-      })
+      return res.json({task: task})
     });
   },
 
   update: (req, res) => {
-    const id = req.params.id;
-    const data = {
-      title: req.body.title,
-      description: req.body.description
-    };
-
-    Task.findOneAndUpdate({_id: id}, data, (err, task) => {
+    Task.findOne({_id: req.params.id}, (err, task) => {
       if (err) console.log(err);
+      task.title = req.body.title;
+      task.description = req.body.description;
+      task.save();
       return res.json({
-        message: "Updated successfully",
+        message: "Updated task successfully successfully",
         task: task
       })
     });
@@ -58,9 +49,7 @@ module.exports = {
 
     Task.findOneAndDelete({_id: id}, (err) => {
       if (err) console.log(err);
-      return res.json({
-        message: "Deleted task successfully",
-      })
+      return res.json({message: "Deleted task successfully"})
     });
   },
 
